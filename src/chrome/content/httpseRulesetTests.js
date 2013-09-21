@@ -64,6 +64,8 @@ function testRunner() {
   }
 
   function newTab(number) {
+    if(HTTPSEverywhere.httpseRulesetTests.canceled) return;
+
     num +=1;
     // start a test in this tab
     if(urls.length) {
@@ -79,7 +81,7 @@ function testRunner() {
 
         // detect mixed content blocker
         if(PopupNotifications.getNotification("mixed-content-blocked", gBrowser.getBrowserForTab(tab))) {
-          popup(cururl);
+          HTTPSEverywhere.httpseRulesetTests.updateLog(cururl);
           writeout(cururl);
           // todo: print this in the live window
         }
@@ -104,7 +106,6 @@ function testRunner() {
   //closes tab
   function closeTab(tab) {
     HTTPSEverywhere.httpseRulesetTests.updateStatusBar(num, urls.length); 
-
     gBrowser.selectedTab = tab;
     gBrowser.removeCurrentTab();
     newTab(num);
